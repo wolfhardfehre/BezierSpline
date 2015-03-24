@@ -26,8 +26,8 @@ class AbstractMplCanvas(FigCanvas):
         self.ax = plt.Axes(plt.gcf(),
                            [0, 0, 1, 1])
         plt.gcf().add_axes(self.ax)
-        plt.xlim([0,1000])
-        plt.ylim([0,1000])
+        plt.xlim([0, 1000])
+        plt.ylim([0, 1000])
         self.ax.grid()
         self.activateMovement()
 
@@ -51,19 +51,18 @@ class MplCanvas(AbstractMplCanvas):
         self.mpl_connect('motion_notify_event', self.onMotion)
         self.mpl_connect('pick_event', self.onPick)
         self.mpl_connect('button_press_event', self.setPoint)
-        self.mpl_connect('button_release_event', self.onRelease)             
+        self.mpl_connect('button_release_event', self.onRelease)
 
     def onMotion(self, event):
         x, y = event.xdata, event.ydata
-        if not x or not y: 
+        if not x or not y:
             return
         text = QtCore.QString("x=%5.2f, y=%5.2f" % (x, y))
         self.stat.showMessage(text, 0)
         if event.button == 1 and not self.drawFlag:
             self.element.set_data(x, y)
             self.element.second.set_data(x, y)
-            self.element.clazz.x = x
-            self.element.clazz.y = y
+            self.element.clazz.setCoords(x, y)
             self.updatePlot(self.t_max)
 
     def onPick(self, event):
@@ -72,7 +71,7 @@ class MplCanvas(AbstractMplCanvas):
 
     def setPoint(self, event):
         if self.drawFlag:
-            pt = MplPoint(self, self.ax, event.xdata, 
+            pt = MplPoint(self, self.ax, event.xdata,
                           event.ydata, 'o', '0.5', 10, 0.5, True)
             self.points.append(pt)
             self.updatePlot(self.t_max)
@@ -81,7 +80,7 @@ class MplCanvas(AbstractMplCanvas):
         self.t_max = t
         self.points = []
         for pt in points:
-            p = MplPoint(self, self.ax, pt[0], 
+            p = MplPoint(self, self.ax, pt[0],
                          pt[1], 'o', '0.5', 10, 0.5, True)
             self.points.append(p)
         self.updatePlot(self.t_max)
@@ -115,7 +114,7 @@ class MplCanvas(AbstractMplCanvas):
         self.deleteElements()
         self.elements = []
         self.t_max = t_max
-        
+
         points_x = np.array([p.x for p in self.points])
         points_y = np.array([p.y for p in self.points])
 
@@ -127,7 +126,7 @@ class MplCanvas(AbstractMplCanvas):
 
         if self.subFlag:
             self.buildSublines(points_x, points_y)
-        
+
         self.draw()
 
     def buildBezierSpline(self):
@@ -136,7 +135,8 @@ class MplCanvas(AbstractMplCanvas):
         self.elements.append(MplPoint(self, self.ax, x[-1], y[-1], 'o', 'red'))
 
     def buildPolygon(self):
-        self.elements.append(MplLine(self, self.ax, self.points, '-', '0.5', 5))
+        self.elements.append(
+            MplLine(self, self.ax, self.points, '-', '0.5', 5))
 
     def buildSublines(self, points_x, points_y):
         sub_x, sub_y = tools.createSublines(self.t_max, points_x, points_y)
@@ -148,7 +148,8 @@ class MplCanvas(AbstractMplCanvas):
                               sub_y[idx][jdx], 'o', colrs[idx][0])
                 pts.append(pt)
             self.elements.extend(pts)
-            self.elements.append(MplLine(self, self.ax, pts, '-', colrs[idx][0]))
+            self.elements.append(
+                MplLine(self, self.ax, pts, '-', colrs[idx][0]))
 
     def setCurveFlag(self, flag):
         self.curveFlag = flag

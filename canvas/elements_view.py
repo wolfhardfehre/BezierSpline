@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from PyQt4 import QtGui
+import numpy as np
 
 
 class MplDrawables(object):
@@ -23,10 +24,15 @@ class MplPoint(MplDrawables):
     def __init__(self, canvas, ax, x, y, sign="o", col="black", width=5, alpha=0.8, prim=False):
         MplDrawables.__init__(self, canvas, ax, sign, col, width, alpha)
         self.moveFlag = False
+        self.prim = prim
+
+        self.setCoords(x, y)
+        self.drawElement()
+
+    def setCoords(self, x, y):
         self.x = x
         self.y = y
-        self.prim = prim
-        self.drawElement()
+        self.p = np.array([x, y])
 
     def remove(self):
         self.element.remove()
@@ -35,28 +41,28 @@ class MplPoint(MplDrawables):
 
     def drawElement(self):
         if self.prim:
-            self.element = self.ax.plot(self.x, 
-                                    self.y,
-                                    self.sign,
-                                    picker=5,
-                                    ms=self.width,
-                                    color=self.col,
-                                    alpha=self.alpha).pop(0)
-            self.element2 = self.ax.plot(self.x, 
-                                    self.y,
-                                    "+",
-                                    ms=self.width*2.0,
-                                    mew=2,
-                                    color='0.1',
-                                    alpha=self.alpha).pop(0)
+            self.element = self.ax.plot(self.x,
+                                        self.y,
+                                        self.sign,
+                                        picker=5,
+                                        ms=self.width,
+                                        color=self.col,
+                                        alpha=self.alpha).pop(0)
+            self.element2 = self.ax.plot(self.x,
+                                         self.y,
+                                         "+",
+                                         ms=self.width*2.0,
+                                         mew=2,
+                                         color='0.1',
+                                         alpha=self.alpha).pop(0)
             self.element.second = self.element2
         else:
-            self.element = self.ax.plot(self.x, 
-                                    self.y,
-                                    self.sign,
-                                    ms=self.width,
-                                    color=self.col,
-                                    alpha=self.alpha).pop(0)
+            self.element = self.ax.plot(self.x,
+                                        self.y,
+                                        self.sign,
+                                        ms=self.width,
+                                        color=self.col,
+                                        alpha=self.alpha).pop(0)
         self.element.clazz = self
 
     def getCoords(self):
@@ -66,6 +72,19 @@ class MplPoint(MplDrawables):
                                     "Please Set A Zero Point\n\
                                     Before Calculate The Model")
             return self.x, self.y
+
+    def __mul__(self, other):
+        return other * self.p
+
+    def __rmul__(self, other):
+        return other * self.p
+
+    def __add__(self, other):
+        print isinstance(other, np.array)
+        return other + self.p
+
+    def __str__(self):
+        return "(%6.3f, %6.3f)" % (self.x, self.y)
 
 
 class MplLine(MplDrawables):
@@ -78,7 +97,7 @@ class MplLine(MplDrawables):
         self.drawElement()
 
     def drawElement(self):
-        self.element = self.ax.plot(self.pts_x, 
+        self.element = self.ax.plot(self.pts_x,
                                     self.pts_y,
                                     self.sign,
                                     lw=self.width,
@@ -98,7 +117,7 @@ class MplCurveBezier(MplDrawables):
         self.drawElement()
 
     def drawElement(self):
-        self.element = self.ax.plot(self.x, 
+        self.element = self.ax.plot(self.x,
                                     self.y,
                                     self.sign,
                                     lw=self.width,

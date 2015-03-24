@@ -8,13 +8,13 @@ VERSION = u'0.1.0'
 ABOUT_TEXT = u"""<< Bézier | Spline >>
 Copyleft (ɔ) 2015, Hehl & Fehre
 
-Dieses Programm präsenentiert die interaktive Darstellung eines 
+Dieses Programm präsenentiert die interaktive Darstellung eines
 Bézier-Splines. Mit der linken Maustaste können Punkte gesetzt werden.
-Weiterhin kann über die verschiedenen Checkboxen der Spline, das 
-Polygon oder die Hilfslinien angezeigt werden. 
+Weiterhin kann über die verschiedenen Checkboxen der Spline, das
+Polygon oder die Hilfslinien angezeigt werden.
 
-Das Programm kann ohne Restriktionen genutzt oder modifiziert werden. 
-Sowohl Rohkopien als auch modifizierte Versionen können ohne 
+Das Programm kann ohne Restriktionen genutzt oder modifiziert werden.
+Sowohl Rohkopien als auch modifizierte Versionen können ohne
 Limitierung verbreitet werden."""
 
 # BASIC PARAMETERS ###################################################
@@ -33,6 +33,7 @@ HELP_MENUBAR = u'&Hilfe'
 
 # ACTION TEXT ########################################################
 CLOSE_ACTION = u'&Programm schließen'
+NEW_ACTION = u'&Paramter zurücksetzen '
 OPEN_ACTION = u'&Lade Punkte'
 SAVE_ACTION = u'&Speichere Punkte'
 DELETE_ACTION = u'&Letzten Punkt löschen'
@@ -59,8 +60,3 @@ OPEN_FILEDIALOG = u'Datei öffnen'
 SAVE_FILEDIALOG = u'Datei speichern'
 DEFAULT_FILENAME = u'untitled'
 FILE_FROMAT = u'*.bezier'
-
-# TEST SETTINGS ######################################################
-TEST_PUNKTE = [(0.0, 0.0), (25.0, 30.0), (50.0, 0.0), (-50.0, -25.0)]
-TEST_TMAX = 0.6
-TEST_RESULT = (18.0, 9.0)

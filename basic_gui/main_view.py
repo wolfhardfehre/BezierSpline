@@ -21,6 +21,8 @@ class View(QtGui.QMainWindow):
         self.file_menu.addAction(
             CLOSE_ACTION, self.fileQuit, QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.file_menu.addAction(
+            NEW_ACTION, self.resetValues, QtCore.Qt.CTRL + QtCore.Qt.Key_N)
+        self.file_menu.addAction(
             OPEN_ACTION, self.openFile, QtCore.Qt.CTRL + QtCore.Qt.Key_L)
         self.file_menu.addAction(
             SAVE_ACTION, self.saveFile, QtCore.Qt.CTRL + QtCore.Qt.Key_S)
