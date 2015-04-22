@@ -64,8 +64,7 @@ def createBezierSpline(t_max, points):
     """Bezier spline"""
     ts = np.arange(0.0, t_max + 0.01, 0.01)
     n = len(points) - 1
-    xs = []
-    ys = []
+    xs, ys = [], []
     for t in ts:
         x, y = bezier(t, points, n)
         xs.append(x)
@@ -73,9 +72,17 @@ def createBezierSpline(t_max, points):
     return xs, ys
 
 
+def getScatters(t, points):
+    n = len(points) - 1
+    factors = []
+    for k, point in enumerate(points):
+        bc = binCoeff(n, k)
+        factors.append(bc * t**k * (1 - t)**(n - k))
+    return factors
+
+
 def createSublines(t_max, pts_x, pts_y):
-    sub_x = []
-    sub_y = []
+    sub_x, sub_y = [], []
     while len(pts_x) > 2:
         pts_x = (1 - t_max) * pts_x[:-1] + t_max * pts_x[1:]
         pts_y = (1 - t_max) * pts_y[:-1] + t_max * pts_y[1:]
